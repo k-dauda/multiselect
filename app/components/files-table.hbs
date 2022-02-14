@@ -1,0 +1,45 @@
+<section class="files-table" ...attributes>
+  <header>
+    <h4 class="table-header" data-test-select-all-header>
+      <input type="checkbox" id="select-all" />
+      <label for="select-all">None Selected</label>
+    </h4>
+    <h4 class="table-header" data-test-download-selected-header>
+      <button type="button" class="download-available-files" disabled>
+        Download Selected
+      </button>
+    </h4>
+  </header>
+  <table>
+    <thead>
+      <th data-test-name-table-header>
+        Name
+      </th>
+      <th data-test-device-table-header>
+        Device
+      </th>
+      <th data-test-path-table-header>
+        Path
+      </th>
+      <th data-test-status-table-header>
+        Status
+      </th>
+    </thead>
+    <tbody>
+      {{#each @files as |file index|}}
+        <tr data-test-table-row="{{index}}">
+          <td class="name">
+            <label id="file-{{index}}">
+              <input type="checkbox" for="file-{{index}}" /> {{file.name}}
+            </label>
+          </td>
+          <td class="device">{{file.device}}</td>
+          <td class="path">{{file.path}}</td>
+          <td class="status">
+            {{file.status}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</section>
