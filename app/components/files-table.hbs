@@ -1,7 +1,7 @@
 <section class="files-table-section" ...attributes>
   <header>
-    <h6 class="section-header" data-test-select-all-header>
-      <label for="select-all">
+    <h6 class="section-header">
+      <label for="select-all" data-test-select-all-label>
         <input
           type="checkbox"
           id="select-all"
@@ -16,14 +16,24 @@
         {{/if}}
       </label>
     </h6>
-    <button type="button" class="download-available-files-btn" disabled={{this.downloadDisabled}} {{on "click" this.downloadSelected}}>
+    <button
+      type="button"
+      class="download-available-files-btn"
+      disabled={{this.downloadDisabled}}
+      {{on "click" this.downloadSelected}}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="-5 -5 24 24">
+        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" fill="currentColor" />
+        <path d="M0 0h24v24H0z" fill="none" />
+      </svg>
       Download Selected
     </button>
   </header>
+
   <table class="files-table">
     <thead>
       <th class="table-header" data-test-name-table-header>
-        <label class="name-header-label">Name</label>
+        <span class="name-header">Name</span>
       </th>
       <th class="table-header" data-test-device-table-header>
         Device
@@ -32,21 +42,21 @@
         Path
       </th>
       <th class="table-header" data-test-status-table-header>
-        <label class="status-header-label">Status</label>
+        <span class="label-push-left">Status</span>
       </th>
     </thead>
     <tbody>
       {{#each this.fileItems as |file index|}}
         <tr data-test-table-row="{{index}}" class="file {{if file.checked "selected"}}">
           <td class="name">
-            <label id="file-{{index}}" class="name-label">
-              <input
-                checked={{file.checked}}
-                type="checkbox"
-                for="file-{{index}}"
-                class="name-checkbox"
-                {{on "change" (fn this.updateCheckbox file)}}
-              />
+            <Input
+              @checked={{file.checked}}
+              @type="checkbox"
+              id="file-{{index}}"
+              class="label-push-left file-checkbox"
+              {{on "change" (fn this.updateSelected file)}}
+            />
+            <label for="file-{{index}}" class="label-push-left">
               {{file.name}}
             </label>
           </td>

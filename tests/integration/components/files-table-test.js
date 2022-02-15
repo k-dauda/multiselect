@@ -1,10 +1,10 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 const SELECTORS = {
-  SELECT_ALL_HEADER: '[data-test-select-all-header]',
+  SELECT_ALL_LABEL: '[data-test-select-all-label]',
   SELECT_ALL_CHECKBOX: '#select-all',
   DOWNLOAD_SELECTED_BUTTON: '.download-available-files-btn',
   NAME_HEADER: '[data-test-name-table-header]',
@@ -12,6 +12,8 @@ const SELECTORS = {
   PATH_HEADER: '[data-test-path-table-header]',
   STATUS_HEADER: '[data-test-status-table-header]',
   TABLE_ROW: '[data-test-table-row="$index"]',
+  FILE_CHECKBOX: '.file-checkbox',
+  CHECKED_FILES: '.file-checkbox:checked',
   NAME: '.name',
   DEVICE: '.device',
   PATH: '.path',
@@ -67,25 +69,11 @@ module('Integration | Component | files-table', function (hooks) {
     ];
   });
 
-  test('it renders with empty list', async function (assert) {
-    this.emptyFiles = [];
-
-    await render(hbs`<FilesTable @files={{this.emptyFiles}} />`);
-
-    assert
-      .dom(SELECTORS.SELECT_ALL_CHECKBOX)
-      .isDisabled('Select all is disabled when there are no files');
-
-    assert
-      .dom(SELECTORS.DOWNLOAD_SELECTED_BUTTON)
-      .isDisabled('Download selected is disabled with no files');
-  });
-
   test('it renders', async function (assert) {
     await render(hbs`<FilesTable @files={{this.files}} />`);
 
     assert
-      .dom(SELECTORS.SELECT_ALL_HEADER)
+      .dom(SELECTORS.SELECT_ALL_LABEL)
       .hasText('None Selected', 'Displays correct selection message');
 
     assert
@@ -139,13 +127,69 @@ module('Integration | Component | files-table', function (hooks) {
     });
   });
 
-  /**
-   * Select all checkbox, selects/unselects the checkboxes
-   * Select all is in indeterminate state when some but not all items are selected
-   * number of selected items is displayed next to select all - display "None Selected"
-   * Download selected button is disabled if there are no available - even with selections
-   * Clicking on download displays the path and device of the selected available files
-   * rows should change color on hover and selected
-   *
-   */
+  test('select all checkbox toggles all the file checkboxes', async function (assert) {
+    await render(hbs`<FilesTable @files={{this.files}} />`);
+
+    assert.dom(SELECTORS.SELECT_ALL_CHECKBOX).isNotChecked();
+    assert.dom(SELECTORS.CHECKED_FILES).doesNotExist();
+    assert
+      .dom(SELECTORS.DOWNLOAD_SELECTED_BUTTON)
+      .isDisabled('Download selected is disabled with no selections');
+
+    // click on select all to select all
+    await click(SELECTORS.SELECT_ALL_CHECKBOX);
+
+    assert.dom(SELECTORS.CHECKED_FILES).exists({ count: 5 });
+
+    assert
+      .dom(SELECTORS.SELECT_ALL_LABEL)
+      .hasText('Selected 5', 'Displays selected count in label');
+
+    assert
+      .dom(SELECTORS.DOWNLOAD_SELECTED_BUTTON)
+      .isEnabled('Download selected is enabled with selections');
+
+    // click on select all to de-select all
+    await click(SELECTORS.SELECT_ALL_CHECKBOX);
+
+    assert.dom(SELECTORS.CHECKED_FILES).doesNotExist();
+
+    assert
+      .dom(SELECTORS.DOWNLOAD_SELECTED_BUTTON)
+      .isDisabled('Download selected is disabled with no selections');
+
+    // check indeteminate state
+    await click(SELECTORS.FILE_CHECKBOX);
+
+    assert
+      .dom(SELECTORS.SELECT_ALL_LABEL)
+      .hasText('Selected 1', 'Displays selected count in label');
+
+    assert.ok(
+      document.querySelector(SELECTORS.SELECT_ALL_CHECKBOX).indeterminate,
+      'Select all is in indeterminate state'
+    );
+  });
+
+  test('it only downloads selected files with a status of available', async function (assert) {
+    assert.expect(1);
+
+    let originalAlert = window.alert;
+    let expectedData =
+      'Path: \\Device\\HarddiskVolume2\\Windows\\System32\\netsh.exe, Device: Targaryen\n\nPath: \\Device\\HarddiskVolume1\\Windows\\System32\\uxtheme.dll, Device: Lanniester';
+
+    window.alert = function (actualData) {
+      assert.strictEqual(
+        actualData,
+        expectedData,
+        'Alert displays proper data'
+      );
+    };
+
+    await render(hbs`<FilesTable @files={{this.files}} />`);
+    await click(SELECTORS.SELECT_ALL_CHECKBOX);
+    await click(SELECTORS.DOWNLOAD_SELECTED_BUTTON);
+
+    window.alert = originalAlert;
+  });
 });
