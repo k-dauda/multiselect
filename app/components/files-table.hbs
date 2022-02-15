@@ -32,12 +32,12 @@
         Path
       </th>
       <th class="table-header" data-test-status-table-header>
-        Status
+        <label class="status-header-label">Status</label>
       </th>
     </thead>
     <tbody>
       {{#each this.fileItems as |file index|}}
-        <tr data-test-table-row="{{index}}">
+        <tr data-test-table-row="{{index}}" class="file {{if file.checked "selected"}}">
           <td class="name">
             <label id="file-{{index}}" class="name-label">
               <input
