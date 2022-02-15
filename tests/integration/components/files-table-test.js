@@ -6,8 +6,7 @@ import { hbs } from 'ember-cli-htmlbars';
 const SELECTORS = {
   SELECT_ALL_HEADER: '[data-test-select-all-header]',
   SELECT_ALL_CHECKBOX: '#select-all',
-  DOWNLOAD_SELECTED_HEADER: '[data-test-download-selected-header]',
-  DOWNLOAD_SELECTED_BUTTON: '.download-available-files',
+  DOWNLOAD_SELECTED_BUTTON: '.download-available-files-btn',
   NAME_HEADER: '[data-test-name-table-header]',
   DEVICE_HEADER: '[data-test-device-table-header]',
   PATH_HEADER: '[data-test-path-table-header]',
@@ -73,9 +72,9 @@ module('Integration | Component | files-table', function (hooks) {
 
     await render(hbs`<FilesTable @files={{this.emptyFiles}} />`);
 
-    // assert
-    //   .dom(SELECTORS.SELECT_ALL_CHECKBOX)
-    //   .isDisabled('Select all is disabled when there are no files');
+    assert
+      .dom(SELECTORS.SELECT_ALL_CHECKBOX)
+      .isDisabled('Select all is disabled when there are no files');
 
     assert
       .dom(SELECTORS.DOWNLOAD_SELECTED_BUTTON)
@@ -98,7 +97,7 @@ module('Integration | Component | files-table', function (hooks) {
       .isDisabled('Download selected is disabled with no selections');
 
     assert
-      .dom(SELECTORS.DOWNLOAD_SELECTED_HEADER)
+      .dom(SELECTORS.DOWNLOAD_SELECTED_BUTTON)
       .hasText('Download Selected', 'Download Selected header is displayed');
 
     assert

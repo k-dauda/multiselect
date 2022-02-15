@@ -1,0 +1,76 @@
+@mixin files-table() {
+  .files-table-section {
+    border: 1px solid $border-color;
+  }
+
+  .section-header, .download-available-files-btn {
+    color: $section-header-color;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin: 0.8rem;
+  }
+
+  .download-available-files-btn {
+    background: transparent;
+    border: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  #select-all, .name-checkbox {
+    margin: 0;
+  }
+
+  .files-table {
+    border-collapse: collapse;
+    border-top: 1px solid $border-color;
+    padding: .5rem 0;
+    width: 100%;
+
+    .name-header-label {
+      margin-left: 2rem;
+    }
+
+    .name-label {
+      margin-left: 1rem;
+    }
+
+    .status {
+      text-transform: capitalize;
+    }
+
+    .available-icon {
+      background: $available-color;
+      border-radius: 50%;
+      display: inline-block;
+      height: 10px;
+      width: 10px;
+
+      &.hidden {
+        visibility: hidden;
+      }
+    }
+
+    .table-header {
+      color: $table-header-color;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: left;
+    }
+
+    th, td {
+      padding: .5rem 0;
+    }
+
+    tr {
+      border-top: 1px solid $border-color;
+
+      &.selected, &:hover {
+        background: $highlight-color;
+      }
+    }
+  }
+}

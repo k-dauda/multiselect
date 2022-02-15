@@ -1,3 +1,4 @@
-#main {
-  padding: 1rem;
-}
+@import 'multiselect-checkbox';
+@import 'components/files-table';
+
+@include files-table();

@@ -1,27 +1,27 @@
-<section class="files-table" ...attributes>
+<section class="files-table-section" ...attributes>
   <header>
-    <h4 class="table-header" data-test-select-all-header>
-      <input type="checkbox" id="select-all" />
-      <label for="select-all">None Selected</label>
-    </h4>
-    <h4 class="table-header" data-test-download-selected-header>
-      <button type="button" class="download-available-files" disabled>
-        Download Selected
-      </button>
-    </h4>
+    <h6 class="section-header" data-test-select-all-header>
+      <label for="select-all">
+        <input type="checkbox" id="select-all" />
+        None Selected
+      </label>
+    </h6>
+    <button type="button" class="download-available-files-btn">
+      Download Selected
+    </button>
   </header>
-  <table>
+  <table class="files-table">
     <thead>
-      <th data-test-name-table-header>
-        Name
+      <th class="table-header" data-test-name-table-header>
+        <label class="name-header-label">Name</label>
       </th>
-      <th data-test-device-table-header>
+      <th class="table-header" data-test-device-table-header>
         Device
       </th>
-      <th data-test-path-table-header>
+      <th class="table-header" data-test-path-table-header>
         Path
       </th>
-      <th data-test-status-table-header>
+      <th class="table-header" data-test-status-table-header>
         Status
       </th>
     </thead>
@@ -29,13 +29,14 @@
       {{#each @files as |file index|}}
         <tr data-test-table-row="{{index}}">
           <td class="name">
-            <label id="file-{{index}}">
-              <input type="checkbox" for="file-{{index}}" /> {{file.name}}
+            <label id="file-{{index}}" class="name-label">
+              <input type="checkbox" for="file-{{index}}" class="name-checkbox" /> {{file.name}}
             </label>
           </td>
           <td class="device">{{file.device}}</td>
           <td class="path">{{file.path}}</td>
           <td class="status">
+            <i class="available-icon {{if (not-eq file.status "available") "hidden"}}" aria-hidden="true" />
             {{file.status}}
           </td>
         </tr>
