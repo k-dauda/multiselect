@@ -2,11 +2,21 @@
   <header>
     <h6 class="section-header" data-test-select-all-header>
       <label for="select-all">
-        <input type="checkbox" id="select-all" />
-        None Selected
+        <input
+          type="checkbox"
+          id="select-all"
+          checked={{this.allSelected}}
+          indeterminate={{this.indeterminate}}
+          {{on "change" this.updateSelection}}
+        />
+        {{#if this.selectedCount}}
+          Selected {{this.selectedCount}}
+        {{else}}
+          None Selected
+        {{/if}}
       </label>
     </h6>
-    <button type="button" class="download-available-files-btn">
+    <button type="button" class="download-available-files-btn" disabled={{this.downloadDisabled}} {{on "click" this.downloadSelected}}>
       Download Selected
     </button>
   </header>
@@ -26,11 +36,18 @@
       </th>
     </thead>
     <tbody>
-      {{#each @files as |file index|}}
+      {{#each this.fileItems as |file index|}}
         <tr data-test-table-row="{{index}}">
           <td class="name">
             <label id="file-{{index}}" class="name-label">
-              <input type="checkbox" for="file-{{index}}" class="name-checkbox" /> {{file.name}}
+              <input
+                checked={{file.checked}}
+                type="checkbox"
+                for="file-{{index}}"
+                class="name-checkbox"
+                {{on "change" (fn this.updateCheckbox file)}}
+              />
+              {{file.name}}
             </label>
           </td>
           <td class="device">{{file.device}}</td>
