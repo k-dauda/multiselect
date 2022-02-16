@@ -6,6 +6,7 @@
           type="checkbox"
           id="select-all"
           checked={{this.allSelected}}
+          disabled={{not @files.length}}
           indeterminate={{this.indeterminate}}
           {{on "change" this.updateSelection}}
         />
@@ -46,15 +47,19 @@
       </th>
     </thead>
     <tbody>
-      {{#each this.fileItems as |file index|}}
-        <tr data-test-table-row="{{index}}" class="file {{if file.checked "selected"}}">
+      <MultiselectCheckbox
+        @items={{@files}}
+        @selectedItems={{this.selectedFiles}}
+        @onchange={{this.updateSelected}}
+        as |checkbox file index|
+      >
+        <tr data-test-table-row="{{index}}" class="file {{if checkbox.isChecked "selected"}}">
           <td class="name">
             <Input
-              @checked={{file.checked}}
+              @checked={{checkbox.isChecked}}
               @type="checkbox"
               id="file-{{index}}"
               class="label-push-left file-checkbox"
-              {{on "change" (fn this.updateSelected file)}}
             />
             <label for="file-{{index}}" class="label-push-left">
               {{file.name}}
@@ -63,11 +68,11 @@
           <td class="device">{{file.device}}</td>
           <td class="path">{{file.path}}</td>
           <td class="status">
-            <i class="available-icon {{if (not-eq file.status "available") "hidden"}}" aria-hidden="true" />
+            <i class="available-icon {{if (not-eq file.status this.AVAILABLE) "hidden"}}" aria-hidden="true" />
             {{file.status}}
           </td>
         </tr>
-      {{/each}}
+      </MultiselectCheckbox>
     </tbody>
   </table>
 </section>

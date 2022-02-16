@@ -21,14 +21,16 @@ const SELECTORS = {
 };
 
 let getRowCellSelectors = function (index) {
-  let rowSelector = SELECTORS.TABLE_ROW.replace('$index', index);
+  let cellSelectors = [
+    SELECTORS.NAME,
+    SELECTORS.DEVICE,
+    SELECTORS.PATH,
+    SELECTORS.STATUS,
+  ];
 
-  return {
-    nameSelector: `${rowSelector} ${SELECTORS.NAME}`,
-    deviceSelector: `${rowSelector}  ${SELECTORS.DEVICE}`,
-    pathSelector: `${rowSelector} ${SELECTORS.PATH}`,
-    statusSelector: `${rowSelector} ${SELECTORS.STATUS}`,
-  };
+  return cellSelectors.map(function (selector) {
+    return `${SELECTORS.TABLE_ROW.replace('$index', index)} ${selector}`;
+  });
 };
 
 module('Integration | Component | files-table', function (hooks) {
@@ -69,6 +71,24 @@ module('Integration | Component | files-table', function (hooks) {
     ];
   });
 
+  test('it renders with empty list', async function (assert) {
+    this.emptyList = [];
+
+    await render(hbs`<FilesTable @files={{this.emptyList}} />`);
+
+    assert
+      .dom(SELECTORS.SELECT_ALL_LABEL)
+      .hasText('None Selected', 'Displays correct selection message');
+
+    assert
+      .dom(SELECTORS.SELECT_ALL_CHECKBOX)
+      .isDisabled('Select all checkbox is disabled');
+
+    assert
+      .dom(SELECTORS.DOWNLOAD_SELECTED_BUTTON)
+      .isDisabled('Download selected is disabled');
+  });
+
   test('it renders', async function (assert) {
     await render(hbs`<FilesTable @files={{this.files}} />`);
 
@@ -106,7 +126,7 @@ module('Integration | Component | files-table', function (hooks) {
 
     // check cell contents
     this.files.forEach(function (file, index) {
-      let { nameSelector, deviceSelector, pathSelector, statusSelector } =
+      let [nameSelector, deviceSelector, pathSelector, statusSelector] =
         getRowCellSelectors(index);
 
       assert
