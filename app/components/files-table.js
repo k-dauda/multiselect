@@ -9,14 +9,11 @@ export default class FilesTableComponent extends Component {
   AVAILABLE = 'available';
 
   get allSelected() {
-    return this.selectedFiles.length && !this.indeterminate;
+    return this.selectedCount && !this.indeterminate;
   }
 
   get indeterminate() {
-    return (
-      this.selectedFiles.length &&
-      this.selectedFiles.length !== this.args.files.length
-    );
+    return this.selectedCount && this.selectedCount !== this.args.files.length;
   }
 
   get selectedCount() {

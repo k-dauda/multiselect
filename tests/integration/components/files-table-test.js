@@ -160,7 +160,6 @@ module('Integration | Component | files-table', function (hooks) {
     await click(SELECTORS.SELECT_ALL_CHECKBOX);
 
     assert.dom(SELECTORS.CHECKED_FILES).exists({ count: 5 });
-
     assert
       .dom(SELECTORS.SELECT_ALL_LABEL)
       .hasText('Selected 5', 'Displays selected count in label');
@@ -173,7 +172,6 @@ module('Integration | Component | files-table', function (hooks) {
     await click(SELECTORS.SELECT_ALL_CHECKBOX);
 
     assert.dom(SELECTORS.CHECKED_FILES).doesNotExist();
-
     assert
       .dom(SELECTORS.DOWNLOAD_SELECTED_BUTTON)
       .isDisabled('Download selected is disabled with no selections');

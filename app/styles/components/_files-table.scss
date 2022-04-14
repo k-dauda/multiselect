@@ -9,19 +9,16 @@
     display: inline-block;
     font-weight: 500;
     font-size: 1.2rem;
-    margin: 0.8rem;
+    margin: .8rem;
   }
 
   .download-available-files-btn {
     background: transparent;
     border: none;
     color: $text-color;
+    cursor: not-allowed;
 
-    .download-icon::before {
-      content: "\f34a";
-    }
-
-    &:hover {
+    &:hover:not([disabled]) {
       cursor: pointer;
     }
   }
@@ -64,10 +61,6 @@
       font-size: 1rem;
       font-weight: 500;
       text-align: left;
-    }
-
-    th, td {
-      padding: .5rem 0;
     }
 
     tr {

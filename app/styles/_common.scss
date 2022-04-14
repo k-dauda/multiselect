@@ -7,3 +7,10 @@ $available-color: #9ed236;
   padding: 1rem;
 }
 
+input[type="checkbox"] {
+  cursor: not-allowed;
+
+  &:hover:not([disabled]) {
+    cursor: pointer;
+  }
+}
